@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Your Name | Salesforce Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,600;1,9..40,300&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #080d1a;
+    --surface: #0e1626;
+    --card: #141e30;
+    --card2: #1a2540;
+    --accent: #00a1e0;
+    --accent2: #f97316;
+    --accent-glow: rgba(0,161,224,0.15);
+    --text: #e2e8f0;
+    --muted: #8899b4;
+    --border: rgba(0,161,224,0.15);
+    --border2: rgba(255,255,255,0.06);
+    --font-display: 'Bebas Neue', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
+    --font-code: 'Fira Code', monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; font-size: 16px; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  ::selection { background: var(--accent); color: #fff; }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 99px; }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 5%;
+    background: rgba(8,13,26,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border2);
+    transition: all 0.3s ease;
+  }
+  .nav-logo {
+    font-family: var(--font-code);
+    font-size: 1rem;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+    text-decoration: none;
+  }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 1px;
+    background: var(--accent); transition: width 0.3s ease;
+  }
+  .nav-links a:hover { color: var(--accent); }
+  .nav-links a:hover::after { width: 100%; }
+  .nav-cta {
+    background: transparent; border: 1px solid var(--accent);
+    color: var(--accent); padding: 0.5rem 1.25rem;
+    border-radius: 4px; font-family: var(--font-body);
+    font-size: 0.875rem; font-weight: 600;
+    cursor: pointer; transition: all 0.2s;
+    text-decoration: none;
+  }
+  .nav-cta:hover { background: var(--accent); color: #fff; }
+
+  /* Hamburger */
+  .hamburger { display: none; background: none; border: none; cursor: pointer; padding: 4px; }
+  .hamburger span { display: block; width: 24px; height: 2px; background: var(--text); margin: 5px 0; transition: all 0.3s; }
+
+  /* Mobile nav */
+  .mobile-nav {
+    display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: var(--bg); z-index: 200; flex-direction: column;
+    align-items: center; justify-content: center; gap: 2rem;
+  }
+  .mobile-nav.open { display: flex; }
+  .mobile-nav a { color: var(--text); text-decoration: none; font-size: 1.5rem; font-weight: 600; }
+  .mobile-close { position: absolute; top: 1.5rem; right: 5%; background: none; border: none; color: var(--text); font-size: 2rem; cursor: pointer; }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: flex; align-items: center;
+    padding: 7rem 5% 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0; z-index: 0;
+    background: radial-gradient(ellipse 70% 60% at 60% 40%, rgba(0,161,224,0.07) 0%, transparent 70%),
+                radial-gradient(ellipse 40% 40% at 10% 80%, rgba(249,115,22,0.04) 0%, transparent 60%);
+  }
+  /* Grid dots */
+  .hero-bg::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+  .hero-content { position: relative; z-index: 1; max-width: 750px; }
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--font-code); font-size: 0.8rem;
+    color: var(--accent); letter-spacing: 0.1em;
+    border: 1px solid var(--border);
+    padding: 0.35rem 0.9rem; border-radius: 2px;
+    background: var(--accent-glow);
+    margin-bottom: 1.5rem;
+    animation: fadeSlideUp 0.6s ease both;
+  }
+  .hero-tag::before { content: '//'; opacity: 0.5; }
+  .hero-name {
+    font-family: var(--font-display);
+    font-size: clamp(4rem, 10vw, 8rem);
+    line-height: 0.95;
+    letter-spacing: 0.02em;
+    color: #fff;
+    margin-bottom: 0.5rem;
+    animation: fadeSlideUp 0.7s 0.1s ease both;
+  }
+  .hero-name span { color: var(--accent); }
+  .hero-role {
+    font-family: var(--font-code);
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+    animation: fadeSlideUp 0.7s 0.2s ease both;
+  }
+  .hero-role .typed-cursor { color: var(--accent); animation: blink 1s infinite; }
+  .hero-desc {
+    font-size: 1.05rem;
+    color: var(--muted);
+    max-width: 520px;
+    line-height: 1.8;
+    margin-bottom: 2.5rem;
+    animation: fadeSlideUp 0.7s 0.3s ease both;
+  }
+  .hero-buttons {
+    display: flex; gap: 1rem; flex-wrap: wrap;
+    animation: fadeSlideUp 0.7s 0.4s ease both;
+  }
+  .btn-primary {
+    background: var(--accent); color: #fff;
+    padding: 0.8rem 2rem; border-radius: 4px;
+    text-decoration: none; font-weight: 600;
+    font-size: 0.9rem; letter-spacing: 0.04em;
+    transition: all 0.2s;
+    border: 1px solid var(--accent);
+  }
+  .btn-primary:hover { background: #0090c8; transform: translateY(-2px); }
+  .btn-outline {
+    background: transparent; color: var(--text);
+    padding: 0.8rem 2rem; border-radius: 4px;
+    text-decoration: none; font-weight: 600;
+    font-size: 0.9rem; letter-spacing: 0.04em;
+    border: 1px solid var(--border2);
+    transition: all 0.2s;
+  }
+  .btn-outline:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+
+  /* Scroll indicator */
+  .scroll-hint {
+    position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    color: var(--muted); font-size: 0.75rem; font-family: var(--font-code);
+    letter-spacing: 0.1em; animation: fadeSlideUp 1s 0.8s ease both;
+  }
+  .scroll-line {
+    width: 1px; height: 50px;
+    background: linear-gradient(to bottom, var(--accent), transparent);
+    animation: scrollPulse 2s infinite;
+  }
+
+  /* ── SECTIONS ── */
+  section { padding: 6rem 5%; }
+  .section-label {
+    font-family: var(--font-code); font-size: 0.78rem;
+    color: var(--accent); letter-spacing: 0.15em;
+    text-transform: uppercase; margin-bottom: 0.75rem;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-label::before { content: '01.'; /* overridden per section */ }
+  .section-h2 {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    color: #fff; letter-spacing: 0.02em;
+    line-height: 1; margin-bottom: 1rem;
+  }
+  .section-divider {
+    width: 60px; height: 2px; background: var(--accent);
+    margin-bottom: 3rem;
+  }
+
+  /* ── ABOUT ── */
+  #about .about-grid {
+    display: grid; grid-template-columns: 3fr 2fr; gap: 5rem; align-items: start;
+  }
+  #about .label::before { content: '01.'; }
+  .about-text p {
+    font-size: 1.05rem; color: var(--muted); line-height: 1.9;
+    margin-bottom: 1.25rem;
+  }
+  .about-text p strong { color: var(--text); font-weight: 600; }
+  .about-highlights {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 2rem;
+  }
+  .highlight-item {
+    background: var(--card); border: 1px solid var(--border2);
+    border-radius: 8px; padding: 1.25rem;
+    transition: border-color 0.2s;
+  }
+  .highlight-item:hover { border-color: var(--accent); }
+  .highlight-num {
+    font-family: var(--font-display); font-size: 2.5rem;
+    color: var(--accent); line-height: 1;
+  }
+  .highlight-label { font-size: 0.8rem; color: var(--muted); margin-top: 0.25rem; }
+  .about-card {
+    background: var(--card); border: 1px solid var(--border2);
+    border-radius: 12px; padding: 2rem; position: relative; overflow: hidden;
+  }
+  .about-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+  }
+  .about-card h3 {
+    font-size: 1rem; font-weight: 600; color: var(--text); margin-bottom: 1.25rem;
+    font-family: var(--font-code); color: var(--accent);
+  }
+  .sf-badge-list { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .sf-badge {
+    font-size: 0.75rem; font-family: var(--font-code);
+    background: rgba(0,161,224,0.1); color: var(--accent);
+    border: 1px solid rgba(0,161,224,0.2);
+    padding: 0.3rem 0.7rem; border-radius: 4px;
+  }
+
+  /* ── SKILLS ── */
+  #skills { background: var(--surface); }
+  #skills .label::before { content: '02.'; }
+  .skills-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+  .skill-category {
+    background: var(--card); border: 1px solid var(--border2);
+    border-radius: 12px; padding: 1.75rem;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+  .skill-category:hover { transform: translateY(-4px); border-color: var(--accent); }
+  .skill-cat-icon {
+    width: 40px; height: 40px; border-radius: 8px;
+    background: var(--accent-glow); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem; margin-bottom: 1rem;
+  }
+  .skill-cat-title {
+    font-size: 1rem; font-weight: 600; color: var(--text);
+    margin-bottom: 1.25rem;
+  }
+  .skill-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .skill-tag {
+    font-size: 0.78rem; font-family: var(--font-code);
+    padding: 0.3rem 0.7rem; border-radius: 4px;
+    transition: all 0.2s;
+  }
+  .skill-tag.core {
+    background: rgba(0,161,224,0.12); color: #60c8f0;
+    border: 1px solid rgba(0,161,224,0.2);
+  }
+  .skill-tag.core:hover { background: rgba(0,161,224,0.25); }
+  .skill-tag.secondary {
+    background: rgba(255,255,255,0.04); color: var(--muted);
+    border: 1px solid var(--border2);
+  }
+  .skill-tag.secondary:hover { color: var(--text); border-color: var(--muted); }
+  .skill-tag.accent2 {
+    background: rgba(249,115,22,0.1); color: #fb923c;
+    border: 1px solid rgba(249,115,22,0.2);
+  }
+
+  /* ── PROJECTS ── */
+  #projects .label::before { content: '03.'; }
+  .projects-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+  }
+  .project-card {
+    background: var(--card); border: 1px solid var(--border2);
+    border-radius: 12px; padding: 2rem;
+    display: flex; flex-direction: column;
+    transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+    position: relative; overflow: hidden;
+  }
+  .project-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(0,161,224,0.35);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.3), 0 0 0 1px rgba(0,161,224,0.08);
+  }
+  .project-card::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .project-card:hover::after { opacity: 1; }
+  .project-top {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 1.25rem;
+  }
+  .project-icon {
+    font-size: 1.5rem; width: 44px; height: 44px;
+    background: var(--card2); border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .project-links { display: flex; gap: 0.75rem; }
+  .project-links a {
+    color: var(--muted); text-decoration: none; font-size: 0.85rem;
+    transition: color 0.2s;
+  }
+  .project-links a:hover { color: var(--accent); }
+  .project-name {
+    font-size: 1.15rem; font-weight: 600; color: var(--text);
+    margin-bottom: 0.6rem; line-height: 1.3;
+  }
+  .project-desc {
+    font-size: 0.9rem; color: var(--muted); line-height: 1.7;
+    flex: 1; margin-bottom: 1.5rem;
+  }
+  .project-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .project-tag {
+    font-size: 0.72rem; font-family: var(--font-code);
+    color: var(--accent); letter-spacing: 0.05em;
+  }
+  .project-tag::before { content: '#'; opacity: 0.5; }
+
+  /* Featured project */
+  .project-card.featured {
+    grid-column: 1 / -1;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 2rem; align-items: center;
+    background: linear-gradient(135deg, var(--card) 0%, var(--card2) 100%);
+    border-color: rgba(0,161,224,0.2);
+    padding: 2.5rem;
+  }
+  .project-card.featured .featured-badge {
+    display: inline-block; font-size: 0.7rem; font-family: var(--font-code);
+    color: var(--accent2); border: 1px solid rgba(249,115,22,0.3);
+    background: rgba(249,115,22,0.08);
+    padding: 0.2rem 0.6rem; border-radius: 3px;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+  .project-card.featured .project-name { font-size: 1.5rem; }
+  .project-card.featured .project-desc { font-size: 0.95rem; }
+  .featured-visual {
+    background: var(--card2); border-radius: 8px;
+    border: 1px solid var(--border2); height: 200px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-code); color: var(--accent);
+    font-size: 0.8rem; overflow: hidden; position: relative;
+  }
+  .code-lines { padding: 1.5rem; width: 100%; }
+  .code-line { margin-bottom: 0.4rem; white-space: nowrap; opacity: 0.9; }
+  .code-line .kw { color: #c792ea; }
+  .code-line .cl { color: #ffcb6b; }
+  .code-line .fn { color: #82aaff; }
+  .code-line .st { color: #c3e88d; }
+  .code-line .cm { color: var(--muted); }
+
+  /* ── EXPERIENCE ── */
+  #experience { background: var(--surface); }
+  #experience .label::before { content: '04.'; }
+  .timeline { position: relative; padding-left: 2rem; }
+  .timeline::before {
+    content: ''; position: absolute; left: 0; top: 8px; bottom: 8px;
+    width: 1px; background: var(--border2);
+  }
+  .timeline-item { position: relative; margin-bottom: 3rem; }
+  .timeline-item::before {
+    content: ''; position: absolute; left: -2.4rem; top: 8px;
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--accent); border: 2px solid var(--bg);
+    box-shadow: 0 0 0 3px var(--border);
+  }
+  .timeline-date {
+    font-family: var(--font-code); font-size: 0.78rem;
+    color: var(--accent); letter-spacing: 0.08em; margin-bottom: 0.4rem;
+  }
+  .timeline-role {
+    font-size: 1.1rem; font-weight: 600; color: var(--text); margin-bottom: 0.2rem;
+  }
+  .timeline-company {
+    font-size: 0.9rem; color: var(--muted); margin-bottom: 0.75rem;
+  }
+  .timeline-points { list-style: none; }
+  .timeline-points li {
+    font-size: 0.9rem; color: var(--muted); line-height: 1.7;
+    padding-left: 1.2rem; position: relative; margin-bottom: 0.4rem;
+  }
+  .timeline-points li::before {
+    content: '▹'; position: absolute; left: 0; color: var(--accent);
+  }
+
+  /* ── CERTIFICATIONS ── */
+  .certs-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem; margin-top: 3rem;
+  }
+  .cert-card {
+    background: var(--card); border: 1px solid var(--border2);
+    border-radius: 10px; padding: 1.25rem;
+    display: flex; align-items: center; gap: 1rem;
+    transition: all 0.2s;
+  }
+  .cert-card:hover { border-color: var(--accent); transform: translateX(4px); }
+  .cert-icon {
+    width: 36px; height: 36px; border-radius: 8px;
+    background: var(--accent-glow); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; flex-shrink: 0;
+  }
+  .cert-name { font-size: 0.85rem; font-weight: 600; color: var(--text); line-height: 1.3; }
+  .cert-issuer { font-size: 0.75rem; color: var(--muted); margin-top: 0.1rem; }
+
+  /* ── CONTACT ── */
+  #contact .label::before { content: '05.'; }
+  .contact-wrapper {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center;
+  }
+  .contact-left h2 { font-size: clamp(2rem, 4vw, 3.5rem); }
+  .contact-left p { font-size: 1rem; color: var(--muted); line-height: 1.8; margin: 1.25rem 0 2rem; }
+  .contact-links { display: flex; flex-direction: column; gap: 0.75rem; }
+  .contact-link {
+    display: flex; align-items: center; gap: 1rem;
+    color: var(--muted); text-decoration: none;
+    font-size: 0.9rem; transition: color 0.2s;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border2); border-radius: 8px;
+    transition: all 0.2s;
+  }
+  .contact-link:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-glow); }
+  .contact-link-icon {
+    width: 36px; height: 36px; border-radius: 6px;
+    background: var(--card2); display: flex; align-items: center;
+    justify-content: center; font-size: 1rem; flex-shrink: 0;
+  }
+  .contact-form {
+    background: var(--card); border: 1px solid var(--border2);
+    border-radius: 14px; padding: 2rem; position: relative; overflow: hidden;
+  }
+  .contact-form::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+  }
+  .form-group { margin-bottom: 1.25rem; }
+  .form-group label {
+    display: block; font-size: 0.78rem; font-family: var(--font-code);
+    color: var(--muted); letter-spacing: 0.08em; margin-bottom: 0.5rem;
+  }
+  .form-group input, .form-group textarea {
+    width: 100%; background: var(--card2); border: 1px solid var(--border2);
+    border-radius: 6px; padding: 0.75rem 1rem; color: var(--text);
+    font-family: var(--font-body); font-size: 0.9rem;
+    transition: border-color 0.2s; resize: none;
+  }
+  .form-group input:focus, .form-group textarea:focus {
+    outline: none; border-color: var(--accent);
+  }
+  .form-group input::placeholder, .form-group textarea::placeholder { color: var(--muted); }
+  .form-submit {
+    width: 100%; background: var(--accent); color: #fff;
+    border: none; padding: 0.85rem; border-radius: 6px;
+    font-family: var(--font-body); font-size: 0.9rem;
+    font-weight: 600; cursor: pointer; transition: all 0.2s;
+    letter-spacing: 0.04em;
+  }
+  .form-submit:hover { background: #0090c8; transform: translateY(-1px); }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border2);
+    padding: 2rem 5%;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 0.82rem; color: var(--muted);
+    font-family: var(--font-code);
+  }
+  .footer-socials { display: flex; gap: 1.5rem; }
+  .footer-socials a {
+    color: var(--muted); text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-socials a:hover { color: var(--accent); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeSlideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+  @keyframes scrollPulse {
+    0%,100% { opacity: 1; transform: scaleY(1); }
+    50% { opacity: 0.4; transform: scaleY(0.7); }
+  }
+  .fade-in {
+    opacity: 0; transform: translateY(24px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    #about .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .project-card.featured { grid-column: auto; grid-template-columns: 1fr; }
+    .featured-visual { display: none; }
+    .contact-wrapper { grid-template-columns: 1fr; gap: 3rem; }
+  }
+  @media (max-width: 640px) {
+    .nav-links, .nav-cta { display: none; }
+    .hamburger { display: block; }
+    section { padding: 4rem 5%; }
+    .about-highlights { grid-template-columns: 1fr 1fr; }
+    footer { flex-direction: column; gap: 1rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── NAVIGATION ── -->
+<nav id="navbar">
+  <a class="nav-logo" href="#">&lt;YourName /&gt;</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="mailto:your@email.com" class="nav-cta">Hire Me</a>
+  <button class="hamburger" id="hamburger" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-nav" id="mobileNav">
+  <button class="mobile-close" id="mobileClose">✕</button>
+  <a href="#about" class="mobile-link">About</a>
+  <a href="#skills" class="mobile-link">Skills</a>
+  <a href="#projects" class="mobile-link">Projects</a>
+  <a href="#experience" class="mobile-link">Experience</a>
+  <a href="#contact" class="mobile-link">Contact</a>
+</div>
+
+<!-- ── HERO ── -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-tag">Available for opportunities</div>
+    <h1 class="hero-name">
+      <!-- ✏️ Replace with your actual name -->
+      Your<br/><span>Name</span>
+    </h1>
+    <p class="hero-role">
+      &gt; <span id="typed"></span><span class="typed-cursor">|</span>
+    </p>
+    <p class="hero-desc">
+      <!-- ✏️ Replace with your bio -->
+      Salesforce Developer passionate about building scalable solutions on the Salesforce platform. Specializing in Apex, LWC, and seamless integrations that drive business value.
+    </p>
+    <div class="hero-buttons">
+      <a href="#projects" class="btn-primary">View Projects</a>
+      <a href="#contact" class="btn-outline">Get In Touch</a>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <span>scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ── ABOUT ── -->
+<section id="about">
+  <div class="fade-in">
+    <p class="section-label label">About Me</p>
+    <h2 class="section-h2">Who I Am</h2>
+    <div class="section-divider"></div>
+  </div>
+  <div class="about-grid fade-in">
+    <div class="about-text">
+      <!-- ✏️ Replace with your story -->
+      <p>Hi! I'm <strong>Your Name</strong>, a Salesforce Developer based in <strong>Your City, India</strong>. I build powerful, user-centric solutions on the Salesforce platform that help businesses automate processes and improve their workflows.</p>
+      <p>My journey into Salesforce began when I discovered how declarative tools like Flows and Process Builder could transform business operations without a single line of code — and deepened when I realized the full potential of Apex and LWC for complex custom solutions.</p>
+      <p>When I'm not writing Apex classes or building Lightning components, I'm exploring new Salesforce releases, preparing for certifications, and contributing to the Trailblazer community.</p>
+      <div class="about-highlights">
+        <!-- ✏️ Update these numbers -->
+        <div class="highlight-item">
+          <div class="highlight-num">2+</div>
+          <div class="highlight-label">Years of Experience</div>
+        </div>
+        <div class="highlight-item">
+          <div class="highlight-num">10+</div>
+          <div class="highlight-label">Projects Delivered</div>
+        </div>
+        <div class="highlight-item">
+          <div class="highlight-num">3</div>
+          <div class="highlight-label">Salesforce Certifications</div>
+        </div>
+        <div class="highlight-item">
+          <div class="highlight-num">50k+</div>
+          <div class="highlight-label">Trailhead Points</div>
+        </div>
+      </div>
+    </div>
+    <div class="about-card">
+      <h3>// tech.stack</h3>
+      <div class="sf-badge-list">
+        <!-- ✏️ Add/remove badges as needed -->
+        <span class="sf-badge">Apex</span>
+        <span class="sf-badge">LWC</span>
+        <span class="sf-badge">SOQL / SOSL</span>
+        <span class="sf-badge">Salesforce Flow</span>
+        <span class="sf-badge">REST API</span>
+        <span class="sf-badge">SOAP API</span>
+        <span class="sf-badge">SFDX / SF CLI</span>
+        <span class="sf-badge">VS Code</span>
+        <span class="sf-badge">Git</span>
+        <span class="sf-badge">JavaScript</span>
+        <span class="sf-badge">HTML / CSS</span>
+        <span class="sf-badge">Sales Cloud</span>
+        <span class="sf-badge">Service Cloud</span>
+        <span class="sf-badge">Experience Cloud</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SKILLS ── -->
+<section id="skills">
+  <div class="fade-in">
+    <p class="section-label label">Skills</p>
+    <h2 class="section-h2">What I Do</h2>
+    <div class="section-divider"></div>
+  </div>
+  <div class="skills-grid">
+    <div class="skill-category fade-in">
+      <div class="skill-cat-icon">⚡</div>
+      <div class="skill-cat-title">Salesforce Platform</div>
+      <div class="skill-tags">
+        <span class="skill-tag core">Apex</span>
+        <span class="skill-tag core">LWC</span>
+        <span class="skill-tag core">Aura</span>
+        <span class="skill-tag core">Visualforce</span>
+        <span class="skill-tag core">SOQL</span>
+        <span class="skill-tag core">SOSL</span>
+        <span class="skill-tag core">Triggers</span>
+        <span class="skill-tag core">Batch Apex</span>
+        <span class="skill-tag core">Queueable</span>
+        <span class="skill-tag core">Scheduled Jobs</span>
+      </div>
+    </div>
+    <div class="skill-category fade-in">
+      <div class="skill-cat-icon">☁️</div>
+      <div class="skill-cat-title">Salesforce Products</div>
+      <div class="skill-tags">
+        <span class="skill-tag core">Sales Cloud</span>
+        <span class="skill-tag core">Service Cloud</span>
+        <span class="skill-tag secondary">Experience Cloud</span>
+        <span class="skill-tag secondary">Marketing Cloud</span>
+        <span class="skill-tag secondary">CPQ</span>
+        <span class="skill-tag secondary">Field Service</span>
+        <span class="skill-tag secondary">Einstein Analytics</span>
+      </div>
+    </div>
+    <div class="skill-category fade-in">
+      <div class="skill-cat-icon">🔄</div>
+      <div class="skill-cat-title">Automation & Flows</div>
+      <div class="skill-tags">
+        <span class="skill-tag core">Screen Flow</span>
+        <span class="skill-tag core">Record-Triggered Flow</span>
+        <span class="skill-tag core">Schedule-Triggered Flow</span>
+        <span class="skill-tag core">Approval Processes</span>
+        <span class="skill-tag secondary">Process Builder</span>
+        <span class="skill-tag secondary">Workflow Rules</span>
+      </div>
+    </div>
+    <div class="skill-category fade-in">
+      <div class="skill-cat-icon">🔌</div>
+      <div class="skill-cat-title">Integration</div>
+      <div class="skill-tags">
+        <span class="skill-tag core">REST API</span>
+        <span class="skill-tag core">SOAP API</span>
+        <span class="skill-tag core">Bulk API</span>
+        <span class="skill-tag secondary">Named Credentials</span>
+        <span class="skill-tag secondary">Platform Events</span>
+        <span class="skill-tag secondary">Change Data Capture</span>
+        <span class="skill-tag accent2">MuleSoft</span>
+      </div>
+    </div>
+    <div class="skill-category fade-in">
+      <div class="skill-cat-icon">🛠️</div>
+      <div class="skill-cat-title">Dev Tools & Practices</div>
+      <div class="skill-tags">
+        <span class="skill-tag core">SFDX / SF CLI</span>
+        <span class="skill-tag core">VS Code</span>
+        <span class="skill-tag core">Git</span>
+        <span class="skill-tag secondary">GitHub Actions</span>
+        <span class="skill-tag secondary">Copado</span>
+        <span class="skill-tag secondary">Gearset</span>
+        <span class="skill-tag accent2">Jest Testing</span>
+        <span class="skill-tag accent2">Apex Unit Tests</span>
+      </div>
+    </div>
+    <div class="skill-category fade-in">
+      <div class="skill-cat-icon">💻</div>
+      <div class="skill-cat-title">Web Technologies</div>
+      <div class="skill-tags">
+        <span class="skill-tag core">JavaScript</span>
+        <span class="skill-tag core">HTML5</span>
+        <span class="skill-tag core">CSS3</span>
+        <span class="skill-tag secondary">Node.js</span>
+        <span class="skill-tag secondary">JSON / XML</span>
+        <span class="skill-tag accent2">React (basics)</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PROJECTS ── -->
+<section id="projects">
+  <div class="fade-in">
+    <p class="section-label label">Projects</p>
+    <h2 class="section-h2">Things I've Built</h2>
+    <div class="section-divider"></div>
+  </div>
+  <div class="projects-grid">
+
+    <!-- ✏️ Featured Project - Replace with yours -->
+    <div class="project-card featured fade-in">
+      <div>
+        <div class="featured-badge">Featured Project</div>
+        <div class="project-name">Service Case Management Portal</div>
+        <p class="project-desc">
+          A full-featured customer service portal built on Experience Cloud, allowing customers to create, track, and escalate support cases. Includes real-time status updates via Platform Events and automated escalation flows with custom SLA tracking.
+        </p>
+        <div class="project-tags">
+          <span class="project-tag">ExperienceCloud</span>
+          <span class="project-tag">Apex</span>
+          <span class="project-tag">LWC</span>
+          <span class="project-tag">PlatformEvents</span>
+          <span class="project-tag">ServiceCloud</span>
+        </div>
+      </div>
+      <div class="featured-visual">
+        <div class="code-lines">
+          <div class="code-line"><span class="cm">// Case escalation handler</span></div>
+          <div class="code-line"><span class="kw">public class</span> <span class="cl">CaseEscalationHandler</span> {</div>
+          <div class="code-line">&nbsp;&nbsp;<span class="kw">@future</span>(<span class="fn">callout=true</span>)</div>
+          <div class="code-line">&nbsp;&nbsp;<span class="kw">public static void</span> <span class="fn">escalate</span>(</div>
+          <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="cl">Set</span>&lt;<span class="cl">Id</span>&gt; caseIds) {</div>
+          <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm">// SLA breach logic</span></div>
+          <div class="code-line">&nbsp;&nbsp;}</div>
+          <div class="code-line">}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ✏️ Project 2 - Replace with yours -->
+    <div class="project-card fade-in">
+      <div class="project-top">
+        <div class="project-icon">📊</div>
+        <div class="project-links">
+          <a href="https://github.com/yourusername" target="_blank">GitHub ↗</a>
+        </div>
+      </div>
+      <div class="project-name">Sales Dashboard LWC</div>
+      <p class="project-desc">A custom Lightning Web Component dashboard providing real-time sales metrics with interactive charts, target vs actual comparisons, and filterable data using SOQL aggregation queries.</p>
+      <div class="project-tags">
+        <span class="project-tag">LWC</span>
+        <span class="project-tag">Apex</span>
+        <span class="project-tag">SOQL</span>
+        <span class="project-tag">SalesCloud</span>
+      </div>
+    </div>
+
+    <!-- ✏️ Project 3 - Replace with yours -->
+    <div class="project-card fade-in">
+      <div class="project-top">
+        <div class="project-icon">🔗</div>
+        <div class="project-links">
+          <a href="https://github.com/yourusername" target="_blank">GitHub ↗</a>
+        </div>
+      </div>
+      <div class="project-name">ERP Integration Framework</div>
+      <p class="project-desc">Bi-directional REST API integration between Salesforce and SAP ERP, syncing Account, Contact, and Order records with error handling, retry logic, and comprehensive logging via custom objects.</p>
+      <div class="project-tags">
+        <span class="project-tag">Apex</span>
+        <span class="project-tag">REST API</span>
+        <span class="project-tag">NamedCredentials</span>
+        <span class="project-tag">Integration</span>
+      </div>
+    </div>
+
+    <!-- ✏️ Project 4 - Replace with yours -->
+    <div class="project-card fade-in">
+      <div class="project-top">
+        <div class="project-icon">⚙️</div>
+        <div class="project-links">
+          <a href="#" target="_blank">Live Demo ↗</a>
+        </div>
+      </div>
+      <div class="project-name">Automated Onboarding Flow</div>
+      <p class="project-desc">Multi-step Screen Flow automating new employee onboarding across HR records, system access provisioning, and welcome email sequences — reducing HR manual effort by 70%.</p>
+      <div class="project-tags">
+        <span class="project-tag">Flow</span>
+        <span class="project-tag">Automation</span>
+        <span class="project-tag">ApexAction</span>
+        <span class="project-tag">EmailTemplates</span>
+      </div>
+    </div>
+
+    <!-- ✏️ Add more projects here -->
+
+  </div>
+</section>
+
+<!-- ── EXPERIENCE ── -->
+<section id="experience">
+  <div class="fade-in">
+    <p class="section-label label">Experience</p>
+    <h2 class="section-h2">Where I've Worked</h2>
+    <div class="section-divider"></div>
+  </div>
+  <div class="timeline fade-in">
+
+    <!-- ✏️ Replace with your actual experience -->
+    <div class="timeline-item">
+      <div class="timeline-date">Jan 2023 – Present</div>
+      <div class="timeline-role">Salesforce Developer</div>
+      <div class="timeline-company">Company Name · Full-time · City, India</div>
+      <ul class="timeline-points">
+        <li>Developed and deployed 15+ Apex classes and LWC components for Sales and Service Cloud customizations.</li>
+        <li>Built complex automation using Flows, reducing manual processing time by over 60%.</li>
+        <li>Designed REST API integrations with third-party ERP and HRMS platforms.</li>
+        <li>Maintained 85%+ code coverage across all Apex classes through unit testing.</li>
+      </ul>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-date">Jul 2022 – Dec 2022</div>
+      <div class="timeline-role">Salesforce Developer Intern</div>
+      <div class="timeline-company">Company Name · Internship · City, India</div>
+      <ul class="timeline-points">
+        <li>Assisted in building Visualforce pages and migrating to Lightning components.</li>
+        <li>Created custom reports and dashboards for business stakeholders.</li>
+        <li>Completed Salesforce Admin & Developer Trailhead modules earning Ranger status.</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- Certifications -->
+  <div class="fade-in" style="margin-top:4rem;">
+    <p class="section-label" style="margin-bottom:0.75rem;">
+      <span style="font-family:var(--font-code);font-size:0.78rem;color:var(--accent);letter-spacing:0.15em;">// Certifications</span>
+    </p>
+    <div class="certs-grid">
+      <!-- ✏️ Add/remove your actual certifications -->
+      <div class="cert-card">
+        <div class="cert-icon">☁️</div>
+        <div>
+          <div class="cert-name">Salesforce Certified Administrator</div>
+          <div class="cert-issuer">Salesforce · 2022</div>
+        </div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-icon">⚡</div>
+        <div>
+          <div class="cert-name">Platform Developer I</div>
+          <div class="cert-issuer">Salesforce · 2023</div>
+        </div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-icon">🔧</div>
+        <div>
+          <div class="cert-name">Platform App Builder</div>
+          <div class="cert-issuer">Salesforce · 2023</div>
+        </div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-icon">🏆</div>
+        <div>
+          <div class="cert-name">Trailhead Ranger</div>
+          <div class="cert-issuer">Salesforce Trailhead</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CONTACT ── -->
+<section id="contact">
+  <div class="fade-in">
+    <p class="section-label label">Contact</p>
+    <h2 class="section-h2">Get In Touch</h2>
+    <div class="section-divider"></div>
+  </div>
+  <div class="contact-wrapper fade-in">
+    <div class="contact-left">
+      <p>Whether you have a Salesforce project in mind, an opportunity to discuss, or just want to connect — my inbox is always open.</p>
+      <div class="contact-links">
+        <!-- ✏️ Replace with your real links -->
+        <a href="mailto:your@email.com" class="contact-link">
+          <div class="contact-link-icon">✉️</div>
+          <span>your@email.com</span>
+        </a>
+        <a href="https://linkedin.com/in/yourprofile" target="_blank" class="contact-link">
+          <div class="contact-link-icon">🔗</div>
+          <span>linkedin.com/in/yourprofile</span>
+        </a>
+        <a href="https://github.com/yourusername" target="_blank" class="contact-link">
+          <div class="contact-link-icon">⌨️</div>
+          <span>github.com/yourusername</span>
+        </a>
+        <a href="https://trailblazer.salesforce.com/id/yourid" target="_blank" class="contact-link">
+          <div class="contact-link-icon">☁️</div>
+          <span>Trailblazer Profile</span>
+        </a>
+      </div>
+    </div>
+    <div class="contact-form">
+      <!-- NOTE: This form needs a backend service to actually send emails.
+           Use Formspree.io (free) — replace the action URL below with your Formspree endpoint.
+           Sign up at formspree.io/register, create a form, paste the endpoint here. -->
+      <form id="contactForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+        <div class="form-group">
+          <label>name</label>
+          <input type="text" name="name" placeholder="Your Name" required/>
+        </div>
+        <div class="form-group">
+          <label>email</label>
+          <input type="email" name="email" placeholder="your@email.com" required/>
+        </div>
+        <div class="form-group">
+          <label>message</label>
+          <textarea name="message" rows="4" placeholder="Tell me about your project..." required></textarea>
+        </div>
+        <button type="submit" class="form-submit">Send Message →</button>
+      </form>
+      <p id="form-status" style="display:none;text-align:center;margin-top:1rem;font-size:0.85rem;color:var(--accent);font-family:var(--font-code);"></p>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <span><!-- ✏️ your name -->&lt;YourName /&gt; · Built with ♥ &amp; zero frameworks</span>
+  <div class="footer-socials">
+    <!-- ✏️ Replace hrefs -->
+    <a href="https://github.com/yourusername" target="_blank">GitHub</a>
+    <a href="https://linkedin.com/in/yourprofile" target="_blank">LinkedIn</a>
+    <a href="https://trailblazer.salesforce.com" target="_blank">Trailblazer</a>
+  </div>
+</footer>
+
+<script>
+// ── TYPED EFFECT
+const phrases = [
+  'Salesforce Developer',
+  'Apex & LWC Engineer',
+  'Integration Specialist',
+  'Trailblazer 🌟'
+];
+let phraseIndex = 0, charIndex = 0, isDeleting = false;
+const typedEl = document.getElementById('typed');
+
+function type() {
+  const current = phrases[phraseIndex];
+  typedEl.textContent = isDeleting
+    ? current.substring(0, charIndex--)
+    : current.substring(0, charIndex++);
+
+  let delay = isDeleting ? 60 : 100;
+
+  if (!isDeleting && charIndex === current.length + 1) {
+    delay = 2000; isDeleting = true;
+  } else if (isDeleting && charIndex === 0) {
+    isDeleting = false;
+    phraseIndex = (phraseIndex + 1) % phrases.length;
+    delay = 400;
+  }
+  setTimeout(type, delay);
+}
+setTimeout(type, 800);
+
+// ── SCROLL FADE IN
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.12 });
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+// ── MOBILE NAV
+const hamburger = document.getElementById('hamburger');
+const mobileNav = document.getElementById('mobileNav');
+const mobileClose = document.getElementById('mobileClose');
+hamburger.addEventListener('click', () => mobileNav.classList.add('open'));
+mobileClose.addEventListener('click', () => mobileNav.classList.remove('open'));
+document.querySelectorAll('.mobile-link').forEach(link => {
+  link.addEventListener('click', () => mobileNav.classList.remove('open'));
+});
+
+// ── NAV SHRINK ON SCROLL
+window.addEventListener('scroll', () => {
+  const nav = document.getElementById('navbar');
+  nav.style.padding = window.scrollY > 60 ? '0.75rem 5%' : '1.2rem 5%';
+});
+
+// ── CONTACT FORM (Formspree)
+const form = document.getElementById('contactForm');
+const status = document.getElementById('form-status');
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const data = new FormData(form);
+  try {
+    const res = await fetch(form.action, { method: 'POST', body: data, headers: { 'Accept': 'application/json' } });
+    if (res.ok) {
+      status.style.display = 'block';
+      status.textContent = '✓ Message sent! I\'ll get back to you soon.';
+      form.reset();
+    } else {
+      status.style.display = 'block';
+      status.textContent = '✗ Something went wrong. Please email me directly.';
+    }
+  } catch {
+    status.style.display = 'block';
+    status.textContent = '✗ Network error. Please try again.';
+  }
+});
+</script>
+</body>
+</html>
